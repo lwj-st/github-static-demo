@@ -3,54 +3,138 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>GitHub Pages 静态网站示例</title>
+    <title>FreeNav - 免费工具导航</title>
     <meta
       name="description"
-      content="一个可以通过 GitHub Pages 直接访问的静态网页示例。"
+      content="精选高频使用的免费网站、开发工具、AI 工具、设计资源和效率工具。"
     >
     <link rel="stylesheet" href="./styles.css">
   </head>
   <body>
-    <main class="page">
+    <header class="topbar">
+      <a class="brand" href="./" aria-label="FreeNav 首页">
+        <span class="brand__mark">FN</span>
+        <span>
+          <strong>FreeNav</strong>
+          <small>免费工具导航</small>
+        </span>
+      </a>
+      <nav class="topnav" aria-label="页面导航">
+        <a href="#featured">精选</a>
+        <a href="#directory">导航</a>
+        <a href="#submit">收录标准</a>
+      </nav>
+    </header>
+
+    <main>
       <section class="hero" aria-labelledby="page-title">
         <div class="hero__content">
-          <p class="eyebrow">GitHub Pages Demo</p>
-          <h1 id="page-title">静态资源也可以像网站一样直接访问</h1>
+          <p class="eyebrow">Curated Free Web Toolkit</p>
+          <h1 id="page-title">把真正好用的免费网站集中到一个入口</h1>
           <p class="intro">
-            把 HTML、CSS、图片和 JavaScript 放进 GitHub 仓库，再开启 GitHub Pages，
-            GitHub 就会把这些文件托管成一个可访问的网址。
+            面向开发、设计、AI、效率、数据、运维和学习场景，筛掉过度营销和低质量链接，
+            保留免费可用、口碑稳定、上手成本低的工具。
           </p>
-          <div class="actions" aria-label="主要操作">
-            <a class="button button--primary" href="https://docs.github.com/pages" target="_blank" rel="noreferrer">
-              查看 Pages 文档
-            </a>
-            <a class="button button--secondary" href="#how-it-works">
-              了解原理
-            </a>
+          <div class="search-panel" role="search">
+            <label class="search-panel__label" for="searchInput">搜索网站、能力或关键词</label>
+            <div class="search-box">
+              <span aria-hidden="true">⌕</span>
+              <input
+                id="searchInput"
+                type="search"
+                autocomplete="off"
+                placeholder="例如：AI、图标、API、部署、图片压缩"
+              >
+            </div>
+            <div class="quick-stats" aria-label="导航统计">
+              <span><strong id="totalCount">0</strong> 个站点</span>
+              <span><strong id="categoryCount">0</strong> 个分类</span>
+              <span><strong>免费优先</strong></span>
+            </div>
           </div>
         </div>
       </section>
 
-      <section class="section" id="how-it-works" aria-labelledby="how-title">
-        <h2 id="how-title">GitHub 怎么展示静态资源</h2>
-        <div class="steps">
-          <article class="step">
-            <span class="step__number">1</span>
-            <h3>仓库存文件</h3>
-            <p>入口通常是 <code>index.html</code>，样式、脚本和图片使用相对路径引用。</p>
+      <section class="section featured" id="featured" aria-labelledby="featured-title">
+        <div class="section__head">
+          <div>
+            <p class="section__eyebrow">Editor Picks</p>
+            <h2 id="featured-title">高频推荐</h2>
+          </div>
+          <p>优先展示免费额度清晰、社区引用多、适合日常交付的网站。</p>
+        </div>
+        <div class="featured-grid" id="featuredGrid"></div>
+      </section>
+
+      <section class="directory" id="directory" aria-labelledby="directory-title">
+        <aside class="filters" aria-label="筛选">
+          <div class="filters__header">
+            <h2 id="directory-title">资源导航</h2>
+            <button class="ghost-button" id="resetFilters" type="button">重置</button>
+          </div>
+
+          <div class="filter-group">
+            <h3>分类</h3>
+            <div class="category-list" id="categoryList"></div>
+          </div>
+
+          <div class="filter-group">
+            <h3>免费类型</h3>
+            <div class="toggle-list" id="planList"></div>
+          </div>
+
+          <div class="filter-group">
+            <h3>排序</h3>
+            <select id="sortSelect" aria-label="排序方式">
+              <option value="recommended">综合推荐</option>
+              <option value="name">名称 A-Z</option>
+              <option value="rating">评分优先</option>
+              <option value="favorites">收藏优先</option>
+            </select>
+          </div>
+        </aside>
+
+        <section class="results" aria-label="网站列表">
+          <div class="results__toolbar">
+            <p id="resultSummary">正在加载资源...</p>
+            <div class="view-tabs" role="tablist" aria-label="视图切换">
+              <button class="view-tab is-active" type="button" data-view="all">全部</button>
+              <button class="view-tab" type="button" data-view="favorites">收藏</button>
+            </div>
+          </div>
+          <div class="resource-grid" id="resourceGrid"></div>
+          <div class="empty-state" id="emptyState" hidden>
+            <h3>没有找到匹配资源</h3>
+            <p>换一个关键词，或减少筛选条件再试。</p>
+          </div>
+        </section>
+      </section>
+
+      <section class="section criteria" id="submit" aria-labelledby="criteria-title">
+        <div class="section__head">
+          <div>
+            <p class="section__eyebrow">Quality Bar</p>
+            <h2 id="criteria-title">收录标准</h2>
+          </div>
+          <p>不是所有免费工具都值得放进导航。这里优先收录能长期服务交付的资源。</p>
+        </div>
+        <div class="criteria-grid">
+          <article>
+            <h3>免费可用</h3>
+            <p>有免费计划、免费额度、开源版本，或核心功能无需付费。</p>
           </article>
-          <article class="step">
-            <span class="step__number">2</span>
-            <h3>Pages 读取来源</h3>
-            <p>GitHub Pages 可以读取分支目录，或通过 Actions 把静态文件上传为站点。</p>
+          <article>
+            <h3>口碑稳定</h3>
+            <p>来自开源清单、开发者社区、设计师社区或长期高频使用场景。</p>
           </article>
-          <article class="step">
-            <span class="step__number">3</span>
-            <h3>生成访问域名</h3>
-            <p>项目站点地址通常是 <code>https://用户名.github.io/仓库名/</code>。</p>
+          <article>
+            <h3>交付友好</h3>
+            <p>加载快、入口清晰、文档完整，适合真实项目和团队协作。</p>
           </article>
         </div>
       </section>
     </main>
+
+    <script src="./app.js" defer></script>
   </body>
 </html>

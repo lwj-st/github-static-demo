@@ -1,14 +1,20 @@
-# GitHub Pages 静态网站示例
+# FreeNav 免费工具导航
 
-这是一个最小静态网页仓库，包含：
+这是一个可直接部署到 GitHub Pages 的静态网站导航，包含分类筛选、搜索、收藏、排序和精选推荐。
 
 - `index.html`：网页入口
 - `styles.css`：页面样式
+- `app.js`：资源数据和筛选逻辑
 - `.github/workflows/pages.yml`：推送到 `main` 后自动部署到 GitHub Pages
 
-## GitHub 如何展示静态资源
+## 功能
 
-GitHub Pages 会把仓库里的静态文件发布到 CDN。浏览器访问 Pages 域名时，GitHub 返回 `index.html`，页面再通过相对路径加载 CSS、JS、图片等资源。
+- 按分类筛选：开发、AI、设计、素材、效率、学习、API、运维、数据、安全、综合
+- 按免费类型筛选：免费可用、免费增值、开源、免费清单
+- 支持关键词搜索
+- 支持本地收藏，收藏数据存储在浏览器 `localStorage`
+- 支持综合推荐、评分、名称和收藏排序
+- 适配桌面和移动端
 
 ## 发布方式
 
