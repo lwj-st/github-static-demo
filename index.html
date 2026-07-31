@@ -20,8 +20,8 @@
         </span>
       </a>
       <nav class="topnav" aria-label="页面导航">
-        <a href="#featured">精选</a>
         <a href="#directory">导航</a>
+        <a href="#featured">精选</a>
         <a href="#submit">收录标准</a>
       </nav>
     </header>
@@ -29,12 +29,11 @@
     <main>
       <section class="hero" aria-labelledby="page-title">
         <div class="hero__content">
-          <p class="eyebrow">Curated Free Web Toolkit</p>
-          <h1 id="page-title">把真正好用的免费网站集中到一个入口</h1>
-          <p class="intro">
-            面向开发、设计、AI、效率、数据、运维和学习场景，筛掉过度营销和低质量链接，
-            保留免费可用、口碑稳定、上手成本低的工具。
-          </p>
+          <div class="hero__copy">
+            <p class="eyebrow">Curated Free Web Toolkit</p>
+            <h1 id="page-title">免费工具导航</h1>
+            <p class="intro">搜索、筛选、收藏高频免费工具，打开就能用。</p>
+          </div>
           <div class="search-panel" role="search">
             <label class="search-panel__label" for="searchInput">搜索网站、能力或关键词</label>
             <div class="search-box">
@@ -51,19 +50,15 @@
               <span><strong id="categoryCount">0</strong> 个分类</span>
               <span><strong>免费优先</strong></span>
             </div>
+            <div class="instant-results" aria-label="搜索即时结果">
+              <div class="instant-results__head">
+                <strong>快速直达</strong>
+                <span id="instantSummary">推荐站点</span>
+              </div>
+              <div class="instant-grid" id="instantGrid"></div>
+            </div>
           </div>
         </div>
-      </section>
-
-      <section class="section featured" id="featured" aria-labelledby="featured-title">
-        <div class="section__head">
-          <div>
-            <p class="section__eyebrow">Editor Picks</p>
-            <h2 id="featured-title">高频推荐</h2>
-          </div>
-          <p>优先展示免费额度清晰、社区引用多、适合日常交付的网站。</p>
-        </div>
-        <div class="featured-grid" id="featuredGrid"></div>
       </section>
 
       <section class="directory" id="directory" aria-labelledby="directory-title">
@@ -108,6 +103,17 @@
             <p>换一个关键词，或减少筛选条件再试。</p>
           </div>
         </section>
+      </section>
+
+      <section class="section featured" id="featured" aria-labelledby="featured-title">
+        <div class="section__head">
+          <div>
+            <p class="section__eyebrow">Editor Picks</p>
+            <h2 id="featured-title">高频推荐</h2>
+          </div>
+          <p>优先展示免费额度清晰、社区引用多、适合日常交付的网站。</p>
+        </div>
+        <div class="featured-grid" id="featuredGrid"></div>
       </section>
 
       <section class="section criteria" id="submit" aria-labelledby="criteria-title">

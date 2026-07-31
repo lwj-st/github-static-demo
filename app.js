@@ -473,6 +473,8 @@ const elements = {
   sortSelect: document.querySelector("#sortSelect"),
   totalCount: document.querySelector("#totalCount"),
   categoryCount: document.querySelector("#categoryCount"),
+  instantGrid: document.querySelector("#instantGrid"),
+  instantSummary: document.querySelector("#instantSummary"),
   emptyState: document.querySelector("#emptyState"),
   viewTabs: document.querySelectorAll(".view-tab"),
 };
@@ -491,23 +493,90 @@ function persistFavorites() {
   localStorage.setItem("freenav:favorites", JSON.stringify([...state.favorites]));
 }
 
-function matchesQuery(item) {
-  const keyword = state.query.trim().toLowerCase();
-  if (!keyword) return true;
+function getDomain(url) {
+  return new URL(url).hostname.replace("www.", "");
+}
 
-  return [item.name, item.category, item.plan, item.summary, ...item.tags]
-    .join(" ")
+function getIconUrl(url) {
+  return `https://www.google.com/s2/favicons?domain=${getDomain(url)}&sz=64`;
+}
+
+function renderLogo(item) {
+  return `
+    <span class="site-logo">
+      <img src="${getIconUrl(item.url)}" alt="" loading="lazy">
+    </span>
+  `;
+}
+
+function normalizeText(text) {
+  return String(text)
     .toLowerCase()
-    .includes(keyword);
+    .replace(/[\s._:/\-]+/g, "")
+    .trim();
+}
+
+function isSubsequence(keyword, text) {
+  let index = 0;
+  for (const char of text) {
+    if (char === keyword[index]) index += 1;
+    if (index === keyword.length) return true;
+  }
+  return false;
+}
+
+function getEditDistance(a, b) {
+  if (!a) return b.length;
+  if (!b) return a.length;
+
+  const previous = Array.from({ length: b.length + 1 }, (_, index) => index);
+  for (let i = 1; i <= a.length; i += 1) {
+    let diagonal = previous[0];
+    previous[0] = i;
+    for (let j = 1; j <= b.length; j += 1) {
+      const temp = previous[j];
+      const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+      previous[j] = Math.min(previous[j] + 1, previous[j - 1] + 1, diagonal + cost);
+      diagonal = temp;
+    }
+  }
+  return previous[b.length];
+}
+
+function getMatchScore(item) {
+  const keyword = normalizeText(state.query);
+  if (!keyword) return item.score;
+
+  const fields = [item.name, getDomain(item.url), item.category, item.plan, item.summary, ...item.tags];
+  const normalizedFields = fields.map(normalizeText).filter(Boolean);
+  const joined = normalizedFields.join("");
+
+  if (normalizedFields.some((field) => field === keyword)) return 1000 + item.score;
+  if (normalizedFields.some((field) => field.startsWith(keyword))) return 900 + item.score;
+  if (joined.includes(keyword)) return 760 + item.score;
+  if (isSubsequence(keyword, joined)) return 520 + item.score;
+
+  const shortFields = normalizedFields.filter((field) => Math.abs(field.length - keyword.length) <= 3);
+  const bestDistance = shortFields.reduce(
+    (best, field) => Math.min(best, getEditDistance(keyword, field.slice(0, Math.max(keyword.length + 2, field.length)))),
+    Infinity,
+  );
+  const tolerance = keyword.length <= 4 ? 1 : 2;
+  if (bestDistance <= tolerance) return 420 - bestDistance * 30 + item.score;
+
+  return 0;
 }
 
 function getFilteredResources() {
-  const filtered = resources.filter((item) => {
-    const categoryMatched = state.category === "全部" || item.category === state.category;
-    const planMatched = state.plan === "全部" || item.plan === state.plan;
-    const favoriteMatched = state.view === "all" || state.favorites.has(item.url);
-    return categoryMatched && planMatched && favoriteMatched && matchesQuery(item);
-  });
+  const filtered = resources
+    .map((item) => ({ ...item, matchScore: getMatchScore(item) }))
+    .filter((item) => {
+      const categoryMatched = state.category === "全部" || item.category === state.category;
+      const planMatched = state.plan === "全部" || item.plan === state.plan;
+      const favoriteMatched = state.view === "all" || state.favorites.has(item.url);
+      const queryMatched = !state.query.trim() || item.matchScore > 0;
+      return categoryMatched && planMatched && favoriteMatched && queryMatched;
+    });
 
   return filtered.sort((a, b) => {
     if (state.sort === "name") return a.name.localeCompare(b.name);
@@ -515,6 +584,7 @@ function getFilteredResources() {
     if (state.sort === "favorites") {
       return Number(state.favorites.has(b.url)) - Number(state.favorites.has(a.url));
     }
+    if (state.query.trim()) return b.matchScore - a.matchScore;
     return Number(Boolean(b.featured)) - Number(Boolean(a.featured)) || b.score - a.score;
   });
 }
@@ -539,7 +609,7 @@ function renderFeatured() {
       (item) => `
         <a class="feature-card" href="${item.url}" target="_blank" rel="noreferrer">
           <div class="site-head">
-            <span class="site-logo">${getInitials(item.name)}</span>
+            ${renderLogo(item)}
             <span class="score">${item.score}</span>
           </div>
           <div>
@@ -550,6 +620,23 @@ function renderFeatured() {
             ${getPlanBadge(item.plan)}
             ${createBadge(item.category)}
           </div>
+        </a>
+      `,
+    )
+    .join("");
+}
+
+function renderInstantResults() {
+  const list = getFilteredResources().slice(0, 6);
+  const query = state.query.trim();
+
+  elements.instantSummary.textContent = query ? `匹配 ${list.length} 个` : "推荐站点";
+  elements.instantGrid.innerHTML = list
+    .map(
+      (item) => `
+        <a class="instant-link" href="${item.url}" target="_blank" rel="noreferrer">
+          ${renderLogo(item)}
+          <span>${item.name}</span>
         </a>
       `,
     )
@@ -595,7 +682,7 @@ function renderResources() {
         <article class="resource-card">
           <div class="site-head">
             <a class="resource-card__link" href="${item.url}" target="_blank" rel="noreferrer">
-              <span class="site-logo">${getInitials(item.name)}</span>
+              ${renderLogo(item)}
             </a>
             <button
               class="favorite-button ${isFavorite ? "is-active" : ""}"
@@ -621,7 +708,7 @@ function renderResources() {
           </div>
           <div class="card-footer">
             <a class="visit-link" href="${item.url}" target="_blank" rel="noreferrer">访问网站</a>
-            <span class="badge">${new URL(item.url).hostname.replace("www.", "")}</span>
+            <span class="badge">${getDomain(item.url)}</span>
           </div>
         </article>
       `;
@@ -640,11 +727,13 @@ function renderStats() {
 function render() {
   renderFilterButtons();
   renderResources();
+  renderInstantResults();
 }
 
 elements.searchInput.addEventListener("input", (event) => {
   state.query = event.target.value;
   renderResources();
+  renderInstantResults();
 });
 
 elements.categoryList.addEventListener("click", (event) => {
@@ -673,6 +762,7 @@ elements.resourceGrid.addEventListener("click", (event) => {
   }
   persistFavorites();
   renderResources();
+  renderInstantResults();
 });
 
 elements.resetFilters.addEventListener("click", () => {
@@ -690,6 +780,7 @@ elements.resetFilters.addEventListener("click", () => {
 elements.sortSelect.addEventListener("change", (event) => {
   state.sort = event.target.value;
   renderResources();
+  renderInstantResults();
 });
 
 elements.viewTabs.forEach((tab) => {
@@ -697,9 +788,11 @@ elements.viewTabs.forEach((tab) => {
     state.view = tab.dataset.view;
     elements.viewTabs.forEach((item) => item.classList.toggle("is-active", item === tab));
     renderResources();
+    renderInstantResults();
   });
 });
 
 renderStats();
 renderFeatured();
+renderInstantResults();
 render();
