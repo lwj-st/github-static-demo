@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>GitHub Pages 静态网站示例</title>
+    <meta
+      name="description"
+      content="一个可以通过 GitHub Pages 直接访问的静态网页示例。"
+    >
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <main class="page">
+      <section class="hero" aria-labelledby="page-title">
+        <div class="hero__content">
+          <p class="eyebrow">GitHub Pages Demo</p>
+          <h1 id="page-title">静态资源也可以像网站一样直接访问</h1>
+          <p class="intro">
+            把 HTML、CSS、图片和 JavaScript 放进 GitHub 仓库，再开启 GitHub Pages，
+            GitHub 就会把这些文件托管成一个可访问的网址。
+          </p>
+          <div class="actions" aria-label="主要操作">
+            <a class="button button--primary" href="https://docs.github.com/pages" target="_blank" rel="noreferrer">
+              查看 Pages 文档
+            </a>
+            <a class="button button--secondary" href="#how-it-works">
+              了解原理
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="how-it-works" aria-labelledby="how-title">
+        <h2 id="how-title">GitHub 怎么展示静态资源</h2>
+        <div class="steps">
+          <article class="step">
+            <span class="step__number">1</span>
+            <h3>仓库存文件</h3>
+            <p>入口通常是 <code>index.html</code>，样式、脚本和图片使用相对路径引用。</p>
+          </article>
+          <article class="step">
+            <span class="step__number">2</span>
+            <h3>Pages 读取来源</h3>
+            <p>GitHub Pages 可以读取分支目录，或通过 Actions 把静态文件上传为站点。</p>
+          </article>
+          <article class="step">
+            <span class="step__number">3</span>
+            <h3>生成访问域名</h3>
+            <p>项目站点地址通常是 <code>https://用户名.github.io/仓库名/</code>。</p>
+          </article>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
