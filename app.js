@@ -680,10 +680,15 @@ function renderResources() {
       const isFavorite = state.favorites.has(item.url);
       return `
         <article class="resource-card">
-          <div class="site-head">
-            <a class="resource-card__link" href="${item.url}" target="_blank" rel="noreferrer">
+          <a class="resource-card__link resource-card__main" href="${item.url}" target="_blank" rel="noreferrer">
+            <div class="site-head">
               ${renderLogo(item)}
-            </a>
+              <span class="score">${item.score}</span>
+            </div>
+            <h3>${item.name}</h3>
+            <p>${item.summary}</p>
+          </a>
+          <div class="resource-card__actions">
             <button
               class="favorite-button ${isFavorite ? "is-active" : ""}"
               type="button"
@@ -694,10 +699,6 @@ function renderResources() {
               ★
             </button>
           </div>
-          <a class="resource-card__link" href="${item.url}" target="_blank" rel="noreferrer">
-            <h3>${item.name}</h3>
-            <p>${item.summary}</p>
-          </a>
           <div class="meta-row">
             ${getPlanBadge(item.plan)}
             ${createBadge(item.category)}
@@ -705,10 +706,6 @@ function renderResources() {
           </div>
           <div class="tag-row">
             ${item.tags.map((tag) => createBadge(tag)).join("")}
-          </div>
-          <div class="card-footer">
-            <a class="visit-link" href="${item.url}" target="_blank" rel="noreferrer">访问网站</a>
-            <span class="badge">${getDomain(item.url)}</span>
           </div>
         </article>
       `;

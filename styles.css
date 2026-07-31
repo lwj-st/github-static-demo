@@ -537,7 +537,8 @@ select {
 }
 
 .resource-card {
-  min-height: 154px;
+  position: relative;
+  min-height: 138px;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -549,13 +550,25 @@ select {
   text-decoration: none;
 }
 
+.resource-card__main {
+  display: grid;
+  gap: 7px;
+  padding-right: 34px;
+}
+
 .resource-card__link:hover h3 {
   color: var(--blue);
 }
 
+.resource-card__actions {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
 .favorite-button {
-  width: 32px;
-  height: 32px;
+  width: 30px;
+  height: 30px;
   display: inline-grid;
   flex: 0 0 auto;
   place-items: center;
@@ -596,20 +609,6 @@ select {
 .badge--open {
   background: #eff6ff;
   color: #1d4ed8;
-}
-
-.card-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-top: auto;
-}
-
-.visit-link {
-  color: var(--primary-dark);
-  font-weight: 900;
-  text-decoration: none;
 }
 
 .empty-state {
