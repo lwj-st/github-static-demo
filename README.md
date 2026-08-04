@@ -1,5 +1,7 @@
 # FreeNav 免费工具导航
 
+## [访问](https://lwj-st.github.io/github-static-demo/)
+
 这是一个可直接部署到 GitHub Pages 的静态网站导航，包含分类筛选、搜索、收藏、排序和精选推荐。
 
 - `index.html`：网页入口
