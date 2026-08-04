@@ -20,6 +20,16 @@ const resources = [
     summary: "代码托管、Issue、Actions、Pages 和开源协作的基础设施。",
   },
   {
+    name: "GitHub Trending",
+    url: "https://github.com/trending",
+    category: "开发",
+    plan: "免费可用",
+    score: 99,
+    featured: true,
+    tags: ["热榜", "开源", "发现"],
+    summary: "GitHub 官方趋势榜，发现近期热门开源项目。",
+  },
+  {
     name: "Vercel",
     url: "https://vercel.com/",
     category: "部署",
