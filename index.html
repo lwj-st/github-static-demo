@@ -19,6 +19,23 @@
           <small>免费工具导航</small>
         </span>
       </a>
+      <div class="search-panel" role="search">
+        <label class="search-panel__label" for="searchInput">搜索网站、能力或关键词</label>
+        <div class="search-box">
+          <span aria-hidden="true">⌕</span>
+          <input
+            id="searchInput"
+            type="search"
+            autocomplete="off"
+            placeholder="搜索网站、能力或关键词，例如 GitHub、AI、正则、CUDA"
+          >
+        </div>
+        <div class="quick-stats" aria-label="导航统计">
+          <span><strong id="totalCount">0</strong> 个站点</span>
+          <span><strong id="categoryCount">0</strong> 个分类</span>
+          <span><strong>免费优先</strong></span>
+        </div>
+      </div>
       <nav class="topnav" aria-label="页面导航">
         <a href="#directory">导航</a>
         <a href="#featured">精选</a>
@@ -27,37 +44,13 @@
     </header>
 
     <main>
-      <section class="hero" aria-labelledby="page-title">
-        <div class="hero__content">
-          <div class="hero__copy">
-            <p class="eyebrow">Curated Free Web Toolkit</p>
-            <h1 id="page-title">免费工具导航</h1>
-            <p class="intro">搜索、筛选、收藏高频免费工具，打开就能用。</p>
+      <section class="quick-strip" aria-label="搜索即时结果">
+        <div class="instant-results">
+          <div class="instant-results__head">
+            <strong>快速直达</strong>
+            <span id="instantSummary">推荐站点</span>
           </div>
-          <div class="search-panel" role="search">
-            <label class="search-panel__label" for="searchInput">搜索网站、能力或关键词</label>
-            <div class="search-box">
-              <span aria-hidden="true">⌕</span>
-              <input
-                id="searchInput"
-                type="search"
-                autocomplete="off"
-                placeholder="例如：AI、图标、API、部署、图片压缩"
-              >
-            </div>
-            <div class="quick-stats" aria-label="导航统计">
-              <span><strong id="totalCount">0</strong> 个站点</span>
-              <span><strong id="categoryCount">0</strong> 个分类</span>
-              <span><strong>免费优先</strong></span>
-            </div>
-            <div class="instant-results" aria-label="搜索即时结果">
-              <div class="instant-results__head">
-                <strong>快速直达</strong>
-                <span id="instantSummary">推荐站点</span>
-              </div>
-              <div class="instant-grid" id="instantGrid"></div>
-            </div>
-          </div>
+          <div class="instant-grid" id="instantGrid"></div>
         </div>
       </section>
 
